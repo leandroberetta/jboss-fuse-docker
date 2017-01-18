@@ -1,19 +1,25 @@
 # jboss-fuse-docker
 
-Dockerfile para generar una imagen de JBoss Fuse.
+This project provides a Dockerfile for generate a JBoss Fuse Docker image.
 
-En este ejemplo se utiliza la versión 6.2.0 pero puede modificarse para instalar otra versión, de hecho la versión a instalarse se descomprime dentro del contenedor. Se debe disponer de un .zip para que el script lo ubique y lo pueda copiar dentro del contenedor.
+## Usage
 
-En este repositorio no se incluye ninguna distribución por motivos de tamaño.
+It can be any official JBoss Fuse 6.X.X downloaded from Red Hat. The Dockerfile allows the configuration of an specific Fuse version with the following variables:
 
-## Modo de uso
+* **ARG FUSE_ZIP** -> Name of the ZIP file
+* **ARG FUSE_FOLDER** -> Name of the uncompressed folder
+* **ARG FUSE_HTTP_LOCATION** -> Any server to download the image
 
-Primero de debe hacer el build de la imagen:
+If the ZIP file is local, it can be served with the Python simple http server executing the following commmand in the folder where the ZIP is:
 
-    docker build --tag jboss-fuse .
+    python -m SimpleHTTPServer 8000
 
-Luego con el siguiente comando se levanta el contenedor:
+Review the Dockerfile to see the ports and volumes available to use.
 
-    docker run -d -p 8181:8181 -p 8101:8101 -v /home/lberetta/docker/data:/opt/jboss/fuse/data jboss-fuse
+## Docker build example
 
-Se debe notar que se exponen los puertos 8181 (Hawtio) y 8101 (SSH) como también se monta el volumen data para leer logs.
+    docker build --build-arg FUSE_ZIP=jboss-fuse-full-6.2.0.redhat-133.zip --build-arg FUSE_FOLDER=jboss-fuse-6.2.0.redhat-133 --build-arg FUSE_HTTP_LOCATION=http://<IP>:8000 -t=redhat/fuse:v6.2.0 .
+
+## Docker run example
+
+    docker run -it redhat/fuse:v6.2.0 /bin/bash
