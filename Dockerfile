@@ -14,9 +14,6 @@ RUN cd /opt/jboss/ && \
 
 EXPOSE 8181 8101 1099 44444 61616
 
-VOLUME /opt/jboss/fuse/data
-VOLUME /opt/jboss/fuse/deploy
-
 COPY etc/users.properties /opt/jboss/fuse/etc
 
 CMD /opt/jboss/fuse/bin/fuse server
